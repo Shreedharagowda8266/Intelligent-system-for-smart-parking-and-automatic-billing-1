@@ -106,32 +106,51 @@ Automated Guidance: Once a user selects a spot, the system can provide navigatio
 #include <SPI.h>
 
 #include <LiquidCrystal.h>
+
 #define SS_PIN 10
+
 #define RST_PIN 9
+
 // Pin configuration for the LCD
 const int rs = 8;
+
 const int en = 7;
+
 const int d4 = 5;
+
 const int d5 = 4;
+
 const int d6 = 3;
+
 const int d7 = 2;
+
 
 // Pin configuration for IR sensors
 const int irSensorPin1 = A0;
+
 const int irSensorPin2 = A1;
+
 const int irSensorPin3 = A2;
+
 const int irSensorPin4 = A3;
 
+
 Servo servoMotor;
+
 const int servoPin=6;
+
 // Create an LCD object
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 // Parking variables
 int totalSpaces = 4;
+
 int availableSpaces = 4;
+
 MFRC522 mfrc522(SS_PIN,RST_PIN);
+
 void setup() {
+
   // Set up the LCD columns and rows
   lcd.begin(20, 4);
   Serial.begin(9600);
