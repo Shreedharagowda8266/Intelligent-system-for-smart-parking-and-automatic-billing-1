@@ -100,8 +100,11 @@ Automated Guidance: Once a user selects a spot, the system can provide navigatio
 
 **CODE:**
 #include <Servo.h>
+
 #include <MFRC522.h>
+
 #include <SPI.h>
+
 #include <LiquidCrystal.h>
 #define SS_PIN 10
 #define RST_PIN 9
