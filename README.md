@@ -41,14 +41,14 @@ Bread board
 
 
 **MIND MAP:**
-![Blue Simple Professional Business Brainstorm (2)](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/b5e4698b-e39a-402b-ac8c-9c87d794542d)
+![Blue Simple Professional Business Brainstorm (2)](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/4f27aa37-d2bc-4616-a84f-78c26f1a6ae5)
 
 **Circuit diagram:**
 ![WhatsApp Image 2023-11-22 at 4 40 03 PM](https://github.com/Shreedharagowda8266/Intelligent-system-for-smart-parking-and-automatic-billing/assets/119619029/94328aa2-ea1d-4ab1-a2e0-06584f22c34f)
 
 **BLOCK DIAGRAM:**
 
-![Arduino (3)](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/72810d76-de3a-4ef0-b13a-7685f0f90df3)
+![Arduino (4)](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/bde0ece8-fcc1-4b68-bda9-5bef230ab3cd)
 
 **APPLICATION:**
 Real-Time Parking Management:
