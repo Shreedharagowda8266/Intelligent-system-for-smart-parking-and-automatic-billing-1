@@ -99,150 +99,137 @@ Automated Guidance: Once a user selects a spot, the system can provide navigatio
 10. End
 
 **CODE:**
-#include <Servo.h>
 
-#include <MFRC522.h>
+    #include <Servo.h>
+    #include <MFRC522.h>
+    #include <SPI.h>
+    #include <LiquidCrystal.h>
+    #define SS_PIN 10
+    #define RST_PIN 9
 
-#include <SPI.h>
+    // Pin configuration for the LCD
+     const int rs = 8;
+     const int en = 7;
+     const int d4 = 5;
+     const int d5 = 4;
+     const int d6 = 3;
+     const int d7 = 2;
+    // Pin configuration for IR sensors
+     const int irSensorPin1 = A0;
+     const int irSensorPin2 = A1;
+     const int irSensorPin3 = A2;
+     const int irSensorPin4 = A3;
+     Servo servoMotor;
+     const int servoPin=6;
 
-#include <LiquidCrystal.h>
+     // Create an LCD object
+     LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-#define SS_PIN 10
+     // Parking variables
+      int totalSpaces = 4;
+      int availableSpaces = 4;
+      MFRC522 mfrc522(SS_PIN,RST_PIN);
+      void setup() {
 
-#define RST_PIN 9
+     // Set up the LCD columns and rows
+       lcd.begin(20, 4);
+       Serial.begin(9600);
+       SPI.begin();
+       mfrc522.PCD_Init();
+       
+      // Simulate initialization of parking system
+        lcd.print("Smart Parking");
+        delay(2000);
+        lcd.clear();
+        servoMotor.attach(servoPin);
+        Serial.println("put your card to the reader");
+        Serial.println();
+        }
 
-// Pin configuration for the LCD
-const int rs = 8;
+       void loop(){
 
-const int en = 7;
+        // Simulate updating parking status
+        updateParkingStatus();
+        // Display parking status on the LCD
+           displayParkingStatus();
+        // Your main code for real-time updates can go here
+         delay(1000);  // Update every 1seconds
+         }
 
-const int d4 = 5;
+      void updateParkingStatus() {
 
-const int d5 = 4;
+       // Read IR sensor inputs
+  
+        int irSensorValue1 = digitalRead(irSensorPin1);
+        int irSensorValue2 = digitalRead(irSensorPin2);
+        int irSensorValue3 = digitalRead(irSensorPin3);
+        int irSensorValue4 = digitalRead(irSensorPin4);
 
-const int d6 = 3;
+          if ( ! mfrc522.PICC_IsNewCardPresent()) 
+          {
+          return;
+          }
+  
+          // Select one of the cards
+        
+          if ( ! mfrc522.PICC_ReadCardSerial()) 
+          {
+          return;
+          }
+  
+         //Show UID on serial monitor
+         
+         Serial.print("UID tag :");
+         String content= "";
+         byte letter;
+         for (byte i = 0; i < mfrc522.uid.size; i++) 
+        {
+         Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+         Serial.print(mfrc522.uid.uidByte[i], HEX);
+         content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+         content.concat(String(mfrc522.uid.uidByte[i], HEX));
+         }
+         Serial.println();
+         Serial.print("Message : ");
+         content.toUpperCase();
+        
+        //change here the UID of the card/cards that you want to give access
+        if (content.substring(1) == "03 89 5E 2F") 
+       {
+       Serial.println("Authorized access");
+       Serial.println();
+       delay(500);
+       servoMotor.write(90);
+       delay(5000);
+        servoMotor.write(0);
+       }
+        else   {
+        Serial.println(" Access denied");
+      }
 
-const int d7 = 2;
+     // Adjust available spaces based on IR sensor inputs
+      availableSpaces = totalSpaces;
+      if (irSensorValue1 == LOW) {
+     availableSpaces--;
+      }
+       if (irSensorValue2 == LOW) {
+       availableSpaces--;
+      }
+      if (irSensorValue3 == LOW) {
+      availableSpaces--;
+     }
+      if (irSensorValue4 == LOW) {
+      availableSpaces--;
+     }
+     
+    // Ensure available spaces do not go below 0
+      availableSpaces = constrain(availableSpaces, 0, totalSpaces);
+     }
+ 
+    void displayParkingStatus() {
+    lcd.clear();
 
-
-// Pin configuration for IR sensors
-const int irSensorPin1 = A0;
-
-const int irSensorPin2 = A1;
-
-const int irSensorPin3 = A2;
-
-const int irSensorPin4 = A3;
-
-
-Servo servoMotor;
-
-const int servoPin=6;
-
-// Create an LCD object
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
-// Parking variables
-int totalSpaces = 4;
-
-int availableSpaces = 4;
-
-MFRC522 mfrc522(SS_PIN,RST_PIN);
-
-void setup() {
-
-  // Set up the LCD columns and rows
-  lcd.begin(20, 4);
-  Serial.begin(9600);
-SPI.begin();
-mfrc522.PCD_Init();
-  // Simulate initialization of parking system
-  lcd.print("Smart Parking");
-  delay(2000);
-  lcd.clear();
-  servoMotor.attach(servoPin);
-  Serial.println("put your card to the reader");
-  Serial.println();
-}
-
-void loop(){
- // Simulate updating parking status
-updateParkingStatus();
-
-  // Display parking status on the LCD
-  displayParkingStatus();
-
-  // Your main code for real-time updates can go here
-
-  delay(1000);  // Update every 1seconds
-}
-
-void updateParkingStatus() {
-  // Read IR sensor inputs
-  int irSensorValue1 = digitalRead(irSensorPin1);
-  int irSensorValue2 = digitalRead(irSensorPin2);
-  int irSensorValue3 = digitalRead(irSensorPin3);
-  int irSensorValue4 = digitalRead(irSensorPin4);
-
-if ( ! mfrc522.PICC_IsNewCardPresent()) 
-  {
-    return;
-  }
-  // Select one of the cards
-  if ( ! mfrc522.PICC_ReadCardSerial()) 
-  {
-    return;
-  }
-  //Show UID on serial monitor
-  Serial.print("UID tag :");
-  String content= "";
-  byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++) 
-  {
-     Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-     Serial.print(mfrc522.uid.uidByte[i], HEX);
-     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-     content.concat(String(mfrc522.uid.uidByte[i], HEX));
-  }
-  Serial.println();
-  Serial.print("Message : ");
-  content.toUpperCase();
-  if (content.substring(1) == "03 89 5E 2F") //change here the UID of the card/cards that you want to give access
-  {
-    Serial.println("Authorized access");
-    Serial.println();
-delay(500);
-servoMotor.write(90);
-delay(5000);
-servoMotor.write(0);
-  }
-  else   {
-    Serial.println(" Access denied");
-  }
-
- // Adjust available spaces based on IR sensor inputs
-  availableSpaces = totalSpaces;
-  if (irSensorValue1 == LOW) {
-    availableSpaces--;
-  }
-  if (irSensorValue2 == LOW) {
-    availableSpaces--;
-  }
-  if (irSensorValue3 == LOW) {
-    availableSpaces--;
-  }
-  if (irSensorValue4 == LOW) {
-    availableSpaces--;
-  }
-
-  // Ensure available spaces do not go below 0
-  availableSpaces = constrain(availableSpaces, 0, totalSpaces);
-}
-
-void displayParkingStatus() {
-  lcd.clear();
-
-  for (int i = 0; i < totalSpaces; ++i) {
+    for (int i = 0; i < totalSpaces; ++i) {
     lcd.setCursor(0, i );
     lcd.print("Space ");
     lcd.print(i + 1);
@@ -252,9 +239,9 @@ void displayParkingStatus() {
       lcd.print("Available");
     } else {
       lcd.print("Occupied");
-}
-}
-}
+    }
+    }
+    }
 
 **RESULT:**
 MODEL:![WhatsApp Image 2023-11-24 at 10 12 22_cb5fb6c7](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/1c53b9a7-c080-4112-9fd3-bf7dee91d124)
