@@ -247,9 +247,8 @@ Automated Guidance: Once a user selects a spot, the system can provide navigatio
 **RESULT:**
 MODEL:![WhatsApp Image 2023-11-24 at 10 12 22_cb5fb6c7](https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/1c53b9a7-c080-4112-9fd3-bf7dee91d124)
 
-DEMO VIDEO:
 
-https://github.com/Nikshepdkotian/Intelligent-system-for-smart-parking-and-automatic-billing/assets/149647274/5e89a091-bf10-436f-bfda-e679ba56d21a
+
 
 
 
